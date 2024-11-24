@@ -1,5 +1,8 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -7,6 +10,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.buildKonfig)
 }
 
 kotlin {
@@ -96,5 +100,18 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+}
+
+val prop = Properties().apply {
+    load(FileInputStream(File(rootProject.rootDir, "local.properties")))
+}
+val token: String = prop.getProperty("ACCESS_TOKEN")
+
+buildkonfig {
+    packageName = "io.github.thegbguy.moviescmp"
+
+    defaultConfigs {
+        buildConfigField(FieldSpec.Type.STRING, "ACCESS_TOKEN", token)
+    }
 }
 

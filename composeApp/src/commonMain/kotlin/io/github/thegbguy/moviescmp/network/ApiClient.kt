@@ -1,5 +1,6 @@
 package io.github.thegbguy.moviescmp.network
 
+import io.github.thegbguy.moviescmp.BuildKonfig
 import io.github.thegbguy.moviescmp.network.response.MovieDetailsResponse
 import io.github.thegbguy.moviescmp.network.response.NowPlayingMoviesResponse
 import io.github.thegbguy.moviescmp.network.response.PopularMoviesResponse
@@ -40,7 +41,7 @@ class ApiClient {
             bearer {
                 loadTokens {
                     BearerTokens(
-                        "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYjIzZWIxZTNhOTZjYWI0MDA4ODZiYzE3YmUxODZkZiIsIm5iZiI6MTczMDk0NjQxOC42MDA4NTY4LCJzdWIiOiI2NzE4YjQ1OWZlZmQxZTA1MTBmZmJkYjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.TmKNNCwZozV276eqC0i4V8ipj_eIyCW9L5OaR1cq9AA",
+                        BuildKonfig.ACCESS_TOKEN,
                         null
                     )
                 }
