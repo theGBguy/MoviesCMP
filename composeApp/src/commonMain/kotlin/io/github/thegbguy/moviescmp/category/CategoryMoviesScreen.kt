@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -24,8 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import app.cash.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -50,7 +48,7 @@ data class CategoryMoviesScreen(private val category: Category) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val screenModel = koinScreenModel<CategoryMoviesScreenModel>()
-        val movies by remember { screenModel.movies }
+        val movies = screenModel.moviesPagingDataFlow.collectAsLazyPagingItems()
 
         LaunchedEffect(Unit) {
             screenModel.getMoviesByCategory(category)
@@ -93,13 +91,17 @@ data class CategoryMoviesScreen(private val category: Category) : Screen {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(bottom = 16.dp)
             ) {
-                items(movies, key = { movie -> movie.id }) { movie ->
-                    MovieItem(
-                        movie = movie,
-                        onMovieClick = {
-                            navigator.push(MovieDetailsScreen(it))
-                        }
-                    )
+                items(
+                    count = movies.itemCount
+                ) { index ->
+                    movies[index]?.let {
+                        MovieItem(
+                            movie = it,
+                            onMovieClick = { movieId ->
+                                navigator.push(MovieDetailsScreen(movieId))
+                            }
+                        )
+                    }
                 }
             }
         }

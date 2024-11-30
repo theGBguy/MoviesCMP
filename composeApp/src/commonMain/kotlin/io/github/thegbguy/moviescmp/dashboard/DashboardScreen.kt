@@ -1,5 +1,6 @@
 package io.github.thegbguy.moviescmp.dashboard
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -75,45 +76,48 @@ class DashboardScreen : Screen {
                 .fillMaxSize()
                 .background(Color.Black)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Section for Now Playing
-            MoviesSection(
-                title = "Now Playing",
-                movies = nowPlayingMovies,
-                onSectionClick = { onSectionClick(Category.NowPlaying) },
-                onMovieClick = onMovieClick
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+            AnimatedContent(topRatedMovies) {
+                MoviesSection(
+                    title = "Now Playing",
+                    movies = nowPlayingMovies,
+                    onSectionClick = { onSectionClick(Category.NowPlaying) },
+                    onMovieClick = onMovieClick
+                )
+            }
 
             // Section for Top Rated
-            MoviesSection(
-                title = "Top Rated",
-                movies = topRatedMovies,
-                onSectionClick = { onSectionClick(Category.TopRated) },
-                onMovieClick = onMovieClick
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+            AnimatedContent(topRatedMovies) {
+                MoviesSection(
+                    title = "Top Rated",
+                    movies = topRatedMovies,
+                    onSectionClick = { onSectionClick(Category.TopRated) },
+                    onMovieClick = onMovieClick
+                )
+            }
 
             // Section for Popular
-            MoviesSection(
-                title = "Popular",
-                movies = popularMovies,
-                onSectionClick = { onSectionClick(Category.Popular) },
-                onMovieClick = onMovieClick
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+            AnimatedContent(topRatedMovies) {
+                MoviesSection(
+                    title = "Popular",
+                    movies = popularMovies,
+                    onSectionClick = { onSectionClick(Category.Popular) },
+                    onMovieClick = onMovieClick
+                )
+            }
 
             // Section for Upcoming
-            MoviesSection(
-                title = "Upcoming",
-                movies = upcomingMovies,
-                onSectionClick = { onSectionClick(Category.Upcoming) },
-                onMovieClick = onMovieClick
-            )
+            AnimatedContent(topRatedMovies) {
+                MoviesSection(
+                    title = "Upcoming",
+                    movies = upcomingMovies,
+                    onSectionClick = { onSectionClick(Category.Upcoming) },
+                    onMovieClick = onMovieClick
+                )
+            }
         }
     }
 

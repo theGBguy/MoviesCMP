@@ -20,6 +20,7 @@ ktor = "3.0.1"
 coroutines = "1.9.0"
 voyagerNavigator = "1.1.0-beta03"
 buildKonfig = "0.15.2"
+pagingCommonVersion = "3.3.0-alpha02-0.4.0"
 
 [libraries]
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
@@ -52,6 +53,7 @@ voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voy
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerNavigator" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyagerNavigator" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerNavigator" }
+paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "pagingCommonVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
