@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import io.github.thegbguy.moviescmp.network.MovieRepository
+import io.github.thegbguy.moviescmp.network.Result
 import io.github.thegbguy.moviescmp.network.response.Movie
 import kotlinx.coroutines.launch
 
@@ -22,19 +23,35 @@ class DashboardScreenModel(private val repository: MovieRepository) : ScreenMode
     }
 
     private fun getPopularMovies() = screenModelScope.launch {
-        popularMovies.value = repository.getPopularMovies().take(10)
+        popularMovies.value = when (val result = repository.getPopularMovies()) {
+            is Result.Success -> result.value
+            is Result.Error -> emptyList()
+            Result.Loading -> emptyList()
+        }
     }
 
     private fun getTopRatedMovies() = screenModelScope.launch {
-        topRatedMovies.value = repository.getTopRatedMovies().take(10)
+        topRatedMovies.value = when (val result = repository.getTopRatedMovies()) {
+            is Result.Success -> result.value
+            is Result.Error -> emptyList()
+            Result.Loading -> emptyList()
+        }
     }
 
     private fun getNowPlayingMovies() = screenModelScope.launch {
-        nowPlayingMovies.value = repository.getNowPlayingMovies().take(10)
+        nowPlayingMovies.value = when (val result = repository.getNowPlayingMovies()) {
+            is Result.Success -> result.value
+            is Result.Error -> emptyList()
+            Result.Loading -> emptyList()
+        }
     }
 
     private fun getUpcomingMovies() = screenModelScope.launch {
-        upcomingMovies.value = repository.getUpcomingMovies().take(10)
+        upcomingMovies.value = when (val result = repository.getUpcomingMovies()) {
+            is Result.Success -> result.value
+            is Result.Error -> emptyList()
+            Result.Loading -> emptyList()
+        }
     }
 
 }

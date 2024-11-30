@@ -16,7 +16,12 @@ import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.get
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.request
+import io.ktor.client.request.url
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -49,28 +54,51 @@ class ApiClient {
         }
     }
 
-    suspend fun getPopularMovies(): PopularMoviesResponse {
-        val response = client.get("$baseUrl/movie/popular?language=en-US&page=1")
-        return response.body()
+    suspend fun getPopularMovies(page: Int): Result<PopularMoviesResponse> {
+        return client.call {
+            url("$baseUrl/movie/popular?language=en-US&page=$page")
+            method = HttpMethod.Get
+        }
     }
 
-    suspend fun getNowPlayingMovies(): NowPlayingMoviesResponse {
-        val response = client.get("$baseUrl/movie/now_playing?language=en-US&page=1")
-        return response.body()
+    suspend fun getNowPlayingMovies(page: Int): Result<NowPlayingMoviesResponse> {
+        return client.call {
+            url("$baseUrl/movie/now_playing?language=en-US&page=$page")
+            method = HttpMethod.Get
+        }
     }
 
-    suspend fun getTopRatedMovies(): TopRatedMoviesResponse {
-        val response = client.get("$baseUrl/movie/top_rated?language=en-US&page=1")
-        return response.body()
+    suspend fun getTopRatedMovies(page: Int): Result<TopRatedMoviesResponse> {
+        return client.call {
+            url("$baseUrl/movie/top_rated?language=en-US&page=$page")
+            method = HttpMethod.Get
+        }
     }
 
-    suspend fun getUpcomingMovies(): UpcomingMoviesResponse {
-        val response = client.get("$baseUrl/movie/upcoming?language=en-US&page=1")
-        return response.body()
+    suspend fun getUpcomingMovies(page: Int): Result<UpcomingMoviesResponse> {
+        return client.call {
+            url("$baseUrl/movie/upcoming?language=en-US&page=$page")
+            method = HttpMethod.Get
+        }
     }
 
-    suspend fun getMovieDetails(id: Int): MovieDetailsResponse {
-        val response = client.get("$baseUrl/movie/$id?language=en-US")
-        return response.body()
+    suspend fun getMovieDetails(id: Int): Result<MovieDetailsResponse> {
+        return client.call {
+            url("$baseUrl/movie/$id?language=en-US")
+            method = HttpMethod.Get
+        }
+    }
+
+    private suspend inline fun <reified T> HttpClient.call(
+        block: HttpRequestBuilder.() -> Unit
+    ): Result<T> = try {
+        val response = request(block)
+        if (response.status == HttpStatusCode.OK) {
+            Result.Success(response.body())
+        } else {
+            Result.Error(Throwable("${response.status}: ${response.bodyAsText()}"))
+        }
+    } catch (e: Exception) {
+        Result.Error(e)
     }
 }
