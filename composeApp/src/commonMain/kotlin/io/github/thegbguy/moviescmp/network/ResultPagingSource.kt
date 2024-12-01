@@ -1,7 +1,7 @@
 package io.github.thegbguy.moviescmp.network
 
+import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import app.cash.paging.PagingSource
 
 open class ResultPagingSource<T : Any>(
     private val pagingData: suspend (page: Int, pageSize: Int) -> Result<List<T>>

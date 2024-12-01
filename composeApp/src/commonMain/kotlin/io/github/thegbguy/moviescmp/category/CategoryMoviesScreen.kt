@@ -22,7 +22,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,7 +31,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import app.cash.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -41,18 +39,16 @@ import coil3.compose.AsyncImage
 import io.github.thegbguy.moviescmp.Category
 import io.github.thegbguy.moviescmp.movieDetails.MovieDetailsScreen
 import io.github.thegbguy.moviescmp.network.response.Movie
+import io.github.thegbguy.moviescmp.utils.collectAsLazyPagingItems
+import org.koin.core.parameter.parametersOf
 
 data class CategoryMoviesScreen(private val category: Category) : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val screenModel = koinScreenModel<CategoryMoviesScreenModel>()
-        val movies = screenModel.moviesPagingDataFlow.collectAsLazyPagingItems()
-
-        LaunchedEffect(Unit) {
-            screenModel.getMoviesByCategory(category)
-        }
+        val screenModel = koinScreenModel<CategoryMoviesScreenModel> { parametersOf(category) }
+        val movies = screenModel.movies.collectAsLazyPagingItems()
 
         Column(
             modifier = Modifier
@@ -91,9 +87,7 @@ data class CategoryMoviesScreen(private val category: Category) : Screen {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(bottom = 16.dp)
             ) {
-                items(
-                    count = movies.itemCount
-                ) { index ->
+                items(count = movies.itemCount) { index ->
                     movies[index]?.let {
                         MovieItem(
                             movie = it,
@@ -162,9 +156,8 @@ fun MovieItem(movie: Movie, onMovieClick: (Int) -> Unit) {
 
 @Composable
 fun MoviePoster(posterPath: String?) {
-    val imageUrl = "https://image.tmdb.org/t/p/w200$posterPath"
     AsyncImage(
-        model = imageUrl,
+        model = "https://image.tmdb.org/t/p/w200$posterPath",
         contentDescription = null,
         modifier = Modifier
             .size(100.dp)
