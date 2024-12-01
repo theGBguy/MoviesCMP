@@ -14,6 +14,6 @@ val appModule = module {
     single { ApiClient() }
     singleOf(::MovieRepositoryImpl) { bind<MovieRepository>() }
     factory { DashboardScreenModel(get()) }
-    factory { CategoryMoviesScreenModel(get()) }
+    factory { params -> CategoryMoviesScreenModel(get(), params.get()) }
     factory { MovieDetailsScreenModel(get()) }
 }

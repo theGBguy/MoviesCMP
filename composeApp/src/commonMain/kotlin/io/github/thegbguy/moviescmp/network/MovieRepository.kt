@@ -30,7 +30,7 @@ class MovieRepositoryImpl(private val apiClient: ApiClient) : MovieRepository {
     }
 
     override fun getPaginatedPopularMovies() = Pager(
-        config = PagingConfig(pageSize = 10, initialLoadSize = 10, enablePlaceholders = false),
+        config = PagingConfig(pageSize = 20, initialLoadSize = 20, enablePlaceholders = false),
         pagingSourceFactory = {
             ResultPagingSource { page, _ ->
                 apiClient.getPopularMovies(page).map { it.results ?: emptyList() }
@@ -43,7 +43,7 @@ class MovieRepositoryImpl(private val apiClient: ApiClient) : MovieRepository {
     }
 
     override fun getPaginatedTopRatedMovies() = Pager(
-        config = PagingConfig(pageSize = 10, initialLoadSize = 10, enablePlaceholders = false),
+        config = PagingConfig(pageSize = 20, initialLoadSize = 20, enablePlaceholders = false),
         pagingSourceFactory = {
             ResultPagingSource { page, _ ->
                 apiClient.getTopRatedMovies(page).map { it.results ?: emptyList() }
@@ -56,7 +56,7 @@ class MovieRepositoryImpl(private val apiClient: ApiClient) : MovieRepository {
     }
 
     override fun getPaginatedNowPlayingMovies() = Pager(
-        config = PagingConfig(pageSize = 10, initialLoadSize = 10, enablePlaceholders = false),
+        config = PagingConfig(pageSize = 20, initialLoadSize = 20, enablePlaceholders = false),
         pagingSourceFactory = {
             ResultPagingSource { page, _ ->
                 apiClient.getNowPlayingMovies(page).map { it.results ?: emptyList() }
@@ -69,7 +69,7 @@ class MovieRepositoryImpl(private val apiClient: ApiClient) : MovieRepository {
     }
 
     override fun getPaginatedUpcomingMovies() = Pager(
-        config = PagingConfig(pageSize = 10, initialLoadSize = 10, enablePlaceholders = false),
+        config = PagingConfig(pageSize = 20, initialLoadSize = 20, enablePlaceholders = false),
         pagingSourceFactory = {
             ResultPagingSource { page, _ ->
                 apiClient.getUpcomingMovies(page).map { it.results ?: emptyList() }
